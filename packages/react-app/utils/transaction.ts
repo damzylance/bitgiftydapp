@@ -11,7 +11,7 @@ export const transferCUSD = async (
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner(userAddress);
 
-    let abi = ["function transfer (addres to, unit256 value)"];
+    let abi = ["function transfer(address to, unit256 value)"];
     let CUSDContract = new Contract(CUSD_ADDRESS, abi, signer);
     let txn = await CUSDContract.transfer(address, parseEther(amount));
     let receipt = await txn;

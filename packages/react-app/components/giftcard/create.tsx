@@ -22,7 +22,6 @@ import Image from "next/image";
 import design from "../../public/assets/bitgifty-birthday01.jpg";
 import { useForm } from "react-hook-form";
 import { newKitFromWeb3 } from "@celo/contractkit";
-import { ethers, Contract } from "ethers";
 import { transferCUSD } from "@/utils/transaction";
 import { useAccount } from "wagmi";
 
