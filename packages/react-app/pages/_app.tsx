@@ -11,12 +11,15 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../Theme";
 import logo from "../public/assets/logo-inline-transparent.png";
+const projectId = "9669a590d8d774e090d288f433e68d51";
 const { chains, publicClient } = configureChains(
   [Celo, Alfajores],
   [publicProvider()]
 );
 
-const connectors = [new InjectedConnector({ chains })];
+// const connectors = [new InjectedConnector({ chains })];
+
+const connectors = celoGroups({ chains, projectId });
 
 const appInfo = {
   appName: "Celo Composer",

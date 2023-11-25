@@ -13,6 +13,7 @@ import {
   InputRightElement,
   Text,
   Textarea,
+  Toast,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -55,12 +56,21 @@ const Create = (props: Props) => {
   //   }
   // };
   const createGiftCard = async (data: any) => {
-    const amount = data.amount;
+    // const amount = data.amount;
+    setLoading(true);
     await transferCUSD(
       "0x1d277449c7e389e50651feb7af2cdf96366474bf",
       userAddress as string,
-      amount as string
-    );
+      data.amount as string
+    )
+      .then((response) => {
+        Toast({ title: "success", status: "success" });
+        setLoading(false);
+      })
+      .catch((error) => {
+        Toast({ title: error.message, status: "warning" });
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
