@@ -262,6 +262,7 @@ const Create = (props: Props) => {
               >
                 Create & Send
               </Button>
+              <Text>{userAddress}</Text>
             </Box>
           </VStack>
         </form>
