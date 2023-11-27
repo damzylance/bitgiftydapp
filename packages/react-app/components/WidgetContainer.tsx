@@ -46,16 +46,8 @@ const WidgetContainer: FC<Props> = ({ children }) => {
           </HStack>
         </HStack>
       </HStack>
-      <VStack width={"full"}>
-        <VStack
-          px={"6px"}
-          py={"4px"}
-          width={"full"}
-          maxW={"500px"}
-          margin={"auto"}
-        >
-          {children}
-        </VStack>
+      <VStack py={"4px"} width={"full"} maxW={"500px"} margin={"auto"}>
+        {children}
       </VStack>
     </VStack>
   );

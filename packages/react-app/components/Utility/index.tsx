@@ -21,9 +21,7 @@ import {
   MdWifiTethering,
 } from "react-icons/md";
 import Airtime from "./Airtime";
-import Data from "./Data";
-import Cable from "./Cable";
-import Electricity from "./Electricity";
+
 const Utility = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 

@@ -5,7 +5,6 @@ import {
   FormErrorMessage,
   FormLabel,
   HStack,
-  Image,
   Input,
   InputGroup,
   InputLeftElement,
@@ -17,15 +16,20 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import mtnLogo from "../../public/assets/mtn_logo.png";
+import gloLogo from "../../public/assets/glo_logo.webp";
+import airtelLogo from "../../public/assets/airtel_logo.png";
+import nineMobileLogo from "../../public/assets/9mobile_logo.jpeg";
+import Image from "next/image";
 
 type Props = {};
 
 const Airtime = (props: Props) => {
   const telcos = [
-    { name: "mtn", logo: "/assets/images/mtn_logo.png", id: "BIL099" },
-    { name: "glo", logo: "/assets/images/glo_logo.webp", id: "BIL102" },
-    { name: "airtel", logo: "/assets/images/airtel_logo.png", id: "BIL100" },
-    { name: "9mobile", logo: "/assets/images/9mobile_logo.jpeg", id: "BIL103" },
+    { name: "mtn", logo: mtnLogo, id: "BIL099" },
+    { name: "glo", logo: gloLogo, id: "BIL102" },
+    { name: "airtel", logo: airtelLogo, id: "BIL100" },
+    { name: "9mobile", logo: nineMobileLogo, id: "BIL103" },
   ];
 
   const [page, setPage] = useState("list");
@@ -85,7 +89,7 @@ export const ProviderCard = (props) => {
       onClick={props.action}
       border={"1px solid #bbcdf1"}
     >
-      <Image width={"50px"} src={props.logo} />
+      <Image alt="" width={50} src={props.logo} />
       <Text fontSize={"lg"} textTransform={"uppercase"}>
         {props.name}
       </Text>

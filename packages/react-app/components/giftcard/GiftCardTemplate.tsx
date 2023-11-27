@@ -22,21 +22,21 @@ const GiftCardTemplate: FC<Props> = ({ children }) => {
   //   window.location.pathname.split("/")[1];
 
   return (
-    <VStack>
+    <VStack w={"95%"} maxW={"500px"} margin={"auto"}>
       <Flex height={"50px"} gap={5} mt={"10px"}>
         <Link href={"/giftcard/create"}>
           <Button
             borderRadius={"none"}
             rightIcon={<RxPlus />}
             variant={"outline"}
-            size={["md", "md", "lg"]}
+            size={["sm", "md", "lg"]}
           >
             Create
           </Button>
         </Link>
         <Link href={"/giftcard/redeem"}>
           <Button
-            size={["md", "md", "lg"]}
+            size={["sm", "md", "lg"]}
             rightIcon={<MdRedeem />}
             // variant={page === "redeem" ? "solid" : "outline"}
             // bg={
@@ -51,7 +51,7 @@ const GiftCardTemplate: FC<Props> = ({ children }) => {
         </Link>
         <Link href={"/giftcard/cards"}>
           <Button
-            size={["md", "md", "lg"]}
+            size={["sm", "md", "lg"]}
             rightIcon={<RxCardStack />}
             borderRadius={"none"}
             // variant={page === "cards" ? "solid" : "outline"}

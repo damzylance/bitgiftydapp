@@ -97,74 +97,13 @@ const Create = (props: Props) => {
                 width={["full", "full", "500px"]}
                 overflowX={"scroll"}
               >
-                <Box>
-                  <HStack
-                    width={"80px"}
-                    height={"70px "}
-                    //   key={image.id}
-                    bgImage={`url(./assets/bitgifty-birthday01.jpg)`}
-                    backgroundSize={"cover"}
-                    bgRepeat={"no-repeat"}
-                    backgroundPosition={"center"}
-                    borderRadius={"base"}
-                    cursor={"pointer"}
-                    //   border={image.link === template.link ? "1px solid #fff" : ""}
-                    _hover={{ border: "1px solid blue" }}
-                    //   onClick={() => {
-                    //     setTemplate({ link: image.link, id: image.id });
-                    //   }}
-                  ></HStack>
-                </Box>
-                <Box>
-                  <HStack
-                    width={"100px"}
-                    height={"70px "}
-                    //   key={image.id}
-                    bgImage={`url(./assets/bitgifty-birthday01.jpg)`}
-                    backgroundSize={"cover"}
-                    backgroundPosition={"center"}
-                    borderRadius={"base"}
-                    cursor={"pointer"}
-                    //   border={image.link === template.link ? "1px solid #fff" : ""}
-                    _hover={{ border: "1px solid blue" }}
-                    //   onClick={() => {
-                    //     setTemplate({ link: image.link, id: image.id });
-                    //   }}
-                  ></HStack>
-                </Box>
-                <Box>
-                  <HStack
-                    width={"100px"}
-                    height={"70px "}
-                    //   key={image.id}
-                    bgImage={`url(./assets/bitgifty-birthday01.jpg)`}
-                    backgroundSize={"cover"}
-                    backgroundPosition={"center"}
-                    borderRadius={"base"}
-                    cursor={"pointer"}
-                    //   border={image.link === template.link ? "1px solid #fff" : ""}
-                    _hover={{ border: "1px solid blue" }}
-                    //   onClick={() => {
-                    //     setTemplate({ link: image.link, id: image.id });
-                    //   }}
-                  ></HStack>
-                </Box>
-                <Box>
-                  <HStack
-                    width={"100px"}
-                    height={"70px "}
-                    //   key={image.id}
-                    bgImage={`url(./assets/bitgifty-birthday01.jpg)`}
-                    backgroundSize={"cover"}
-                    backgroundPosition={"center"}
-                    borderRadius={"base"}
-                    cursor={"pointer"}
-                    //   border={image.link === template.link ? "1px solid #fff" : ""}
-                    _hover={{ border: "1px solid blue" }}
-                    //   onClick={() => {
-                    //     setTemplate({ link: image.link, id: image.id });
-                    //   }}
-                  ></HStack>
+                <Box _hover={{ border: "1px solid blue" }}>
+                  <Image
+                    src={design}
+                    alt="giftcard-design"
+                    width={80}
+                    height={70}
+                  />
                 </Box>
               </HStack>
             </FormControl>

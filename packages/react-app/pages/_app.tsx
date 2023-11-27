@@ -13,7 +13,6 @@ import theme from "../Theme";
 import logo from "../public/assets/logo-inline-transparent.png";
 import WidgetContainer from "@/components/WidgetContainer";
 const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
-console.log(projectId);
 const { chains, publicClient } = configureChains(
   [Celo, Alfajores],
   [publicProvider()]
