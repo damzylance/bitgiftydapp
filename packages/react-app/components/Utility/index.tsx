@@ -123,11 +123,11 @@ const UtilityModal = (props) => {
           <VStack width={"full"}>
             {" "}
             {props.type === "airtime" && <Airtime action={props.onClose} />}
-            {props.type === "data" && <Data action={props.onClose} />}
+            {/* {props.type === "data" && <Data action={props.onClose} />}
             {props.type === "electricity" && (
               <Electricity action={props.onClose} />
             )}
-            {props.type === "cable" && <Cable action={props.onClose} />}
+            {props.type === "cable" && <Cable action={props.onClose} />} */}
           </VStack>
         </ModalBody>
       </ModalContent>
