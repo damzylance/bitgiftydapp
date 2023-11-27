@@ -1,6 +1,6 @@
 import { ethers, Contract, BrowserProvider, parseEther } from "ethers";
 
-const CUSD_ADDRESS = "0x765de816845861e75a25fca122bb6898b8b1282a";
+const CUSD_ADDRESS = process.env.NEXT_PUBLIC_MW as string;
 
 //Generate and send giftcard
 

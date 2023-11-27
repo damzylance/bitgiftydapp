@@ -12,7 +12,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../Theme";
 import logo from "../public/assets/logo-inline-transparent.png";
 import WidgetContainer from "@/components/WidgetContainer";
-const projectId = "9669a590d8d774e090d288f433e68d51";
+const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
+console.log(projectId);
 const { chains, publicClient } = configureChains(
   [Celo, Alfajores],
   [publicProvider()]
