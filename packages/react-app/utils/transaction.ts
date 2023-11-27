@@ -2,6 +2,12 @@ import { ethers, Contract, BrowserProvider, parseEther } from "ethers";
 
 const CUSD_ADDRESS = "0x765de816845861e75a25fca122bb6898b8b1282a";
 
+//Generate and send giftcard
+
+export const createGiftCard = async () => {};
+
+// Transfer cusd
+
 export const transferCUSD = async (
   address: string,
   userAddress: string,
@@ -16,7 +22,7 @@ export const transferCUSD = async (
         return response;
       })
       .catch((error) => {
-        console.log(error);
+        console.log("signer", error);
         return error;
       });
 
@@ -25,14 +31,12 @@ export const transferCUSD = async (
     let CUSDContract = new Contract(CUSD_ADDRESS, abi, signer);
     let txn = await CUSDContract.transfer(address, parseEther(amount))
       .then((response) => {
-        console.log(response);
         return response;
       })
       .catch((error) => {
-        console.log(error);
         return error;
       });
     let receipt = await txn;
-    return txn;
+    return receipt;
   }
 };

@@ -25,10 +25,13 @@ import { useForm } from "react-hook-form";
 import { newKitFromWeb3 } from "@celo/contractkit";
 import { transferCUSD } from "@/utils/transaction";
 import { useAccount } from "wagmi";
+import Link from "next/link";
+import GiftCardTemplate from "./GiftCardTemplate";
 
 type Props = {};
 
 const Create = (props: Props) => {
+  const toast = useToast();
   const [userAddress, setUserAddress] = useState("");
   const { address, isConnected } = useAccount();
   const {
@@ -44,33 +47,31 @@ const Create = (props: Props) => {
   const [checkEmail, setCheckEmail] = useState(false);
   const amountMin = 0.1;
 
-  // const createCard = async () => {
-  //   if (window.ethereum && window.ethereum) {
-  //     newKitFromWeb3(provider);
-  //     kit.web3.eth.requestAccounts().then((result) => {
-  //       kit.defaultAccount = result[0];
-  //       let displayText = `...${kit.defaultAccount.substring(0, 8)}...`;
-  //     });
-  //   } else {
-  //     console.log("ETH wallet not active");
-  //   }
-  // };
   const createGiftCard = async (data: any) => {
-    // const amount = data.amount;
-    setLoading(true);
-    await transferCUSD(
-      "0x1d277449c7e389e50651feb7af2cdf96366474bf",
-      userAddress as string,
-      data.amount as string
-    )
-      .then((response) => {
-        Toast({ title: "success", status: "success" });
-        setLoading(false);
-      })
-      .catch((error) => {
-        Toast({ title: error.message, status: "warning" });
-        setLoading(false);
-      });
+    try {
+      setLoading(true);
+      const amount = data.amount;
+      const response = await transferCUSD(
+        "0x1d277449c7e389e50651feb7af2cdf96366474bf",
+        userAddress,
+        data.amount
+      );
+
+      if (response.hash) {
+        toast({
+          title: "Giftcard created successfully and sent to recipient's email",
+        });
+      } else if (response.message.includes("ethers-user-denied")) {
+        toast({ title: "User rejected transaction", status: "warning" });
+      } else {
+        toast({ title: "An error occurred", status: "warning" });
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast({ title: error.message, status: "warning" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -79,40 +80,9 @@ const Create = (props: Props) => {
     }
   }, [address, isConnected]);
   return (
-    <VStack w={"full"}>
-      <Flex height={"50px"} width={"full"} gap={5} px={"6px"}>
-        <Button
-          borderRadius={"none"}
-          rightIcon={<RxPlus />}
-          background={
-            " linear-gradient(106deg, #103D96 27.69%, #306FE9 102.01%)"
-          }
-          variant={"solid"}
-          size={["md", "md", "lg"]}
-        >
-          Create
-        </Button>
-
-        <Button
-          size={["md", "md", "lg"]}
-          rightIcon={<MdRedeem />}
-          variant={"outline"}
-          borderRadius={"none"}
-        >
-          Reedeem
-        </Button>
-
-        <Button
-          size={["md", "md", "lg"]}
-          variant={"outline"}
-          rightIcon={<RxCardStack />}
-          borderRadius={"none"}
-        >
-          My Cards
-        </Button>
-      </Flex>
+    <GiftCardTemplate>
       <VStack width={"full"}>
-        <Image src={design} width={240} height={230} alt="" />
+        <Image src={design} width={240} height={230} priority alt="" />
         <form
           action=""
           onSubmit={handleSubmit(createGiftCard)}
@@ -277,7 +247,7 @@ const Create = (props: Props) => {
           </VStack>
         </form>
       </VStack>
-    </VStack>
+    </GiftCardTemplate>
   );
 };
 

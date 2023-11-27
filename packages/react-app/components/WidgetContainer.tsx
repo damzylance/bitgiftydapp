@@ -2,6 +2,7 @@ import { HStack, Text, VStack } from "@chakra-ui/react";
 import React, { FC, ReactNode } from "react";
 import logo from "../public/assets/logo-inline-transparent.png";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
   children: ReactNode;
@@ -21,12 +22,27 @@ const WidgetContainer: FC<Props> = ({ children }) => {
         >
           <Image alt="logo" style={{ width: "80px" }} src={logo} />
           <HStack>
-            <Text color={"#fff"} fontSize={"small"} fontWeight={"500"}>
-              GiftCard
-            </Text>
-            <Text color={"#fff"} fontSize={"small"} fontWeight={"500"}>
-              Spend
-            </Text>
+            <Link href={"/giftcard/create"}>
+              <Text
+                color={"#fff"}
+                fontSize={"small"}
+                fontWeight={"500"}
+                _hover={{ textDecoration: "underline", fontWeight: "700" }}
+              >
+                GiftCard
+              </Text>
+            </Link>
+            <Link href={"/spend/"}>
+              {" "}
+              <Text
+                color={"#fff"}
+                fontSize={"small"}
+                fontWeight={"500"}
+                _hover={{ textDecoration: "underline", fontWeight: "700" }}
+              >
+                Spend
+              </Text>
+            </Link>
           </HStack>
         </HStack>
       </HStack>

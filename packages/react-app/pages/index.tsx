@@ -1,7 +1,7 @@
 import WidgetContainer from "@/components/WidgetContainer";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import Create from "@/components/giftcard/create";
+import { VStack } from "@chakra-ui/react";
 
 export default function Home({}) {
   const [userAddress, setUserAddress] = useState("");
@@ -14,16 +14,13 @@ export default function Home({}) {
   }, [address, isConnected]);
 
   return (
-    <WidgetContainer>
-      <Create />
-      <div className="flex flex-col justify-center items-center">
-        <div className="h1">
-          There you go... a canvas for your next Celo project!
-        </div>
-        {isConnected && (
-          <div className="h2 text-center">Your address: {userAddress}</div>
-        )}
+    <div className="flex flex-col justify-center items-center">
+      <div className="h1">
+        There you go... a canvas for your next Celo project!
       </div>
-    </WidgetContainer>
+      {isConnected && (
+        <div className="h2 text-center">Your address: {userAddress}</div>
+      )}
+    </div>
   );
 }
