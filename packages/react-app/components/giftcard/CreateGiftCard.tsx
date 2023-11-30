@@ -30,7 +30,7 @@ import GiftCardTemplate from "./GiftCardTemplate";
 
 type Props = {};
 
-const Create = (props: Props) => {
+const CreateGiftCard = (props: Props) => {
   const toast = useToast();
   const [userAddress, setUserAddress] = useState("");
   const { address, isConnected } = useAccount();
@@ -190,4 +190,4 @@ const Create = (props: Props) => {
   );
 };
 
-export default Create;
+export default CreateGiftCard;

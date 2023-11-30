@@ -1,11 +1,12 @@
 import WidgetContainer from "@/components/WidgetContainer";
-import Create from "@/components/giftcard/Create";
+import CreateGiftCard from "@/components/giftcard/CreateGiftCard";
+
 import React from "react";
 
 type Props = {};
 
 const create = (props: Props) => {
-  return <Create />;
+  return <CreateGiftCard />;
 };
 
 export default create;
