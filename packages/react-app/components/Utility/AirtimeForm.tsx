@@ -37,8 +37,6 @@ export const AirtimeForm = (props: Props) => {
   const [minAmount, setMinAmount] = useState("");
 
   const buyAirtime = async (data: any) => {
-    // data.type = "AIRTIME";
-    // data.bill_type = props.networkId;
     data.bill_type = "AIRTIME";
     data.country = "NG";
     // data.token_amount = tokenAmount;
@@ -74,84 +72,6 @@ export const AirtimeForm = (props: Props) => {
       setTokenAmount(tokenToNairaRate * tempNairaAmount);
     }
   };
-  // const fetchRate = async (currency) => {
-  //   let rate;
-  //   if (currency === "btc") {
-  //     currency = "bitcoin";
-  //   }
-
-  //   if (currency === "naira") {
-  //     rate = 1;
-  //     setTokenToNairaRate(parseFloat(1));
-  //   } else if (currency === "usdt_tron" || currency === "cusd") {
-  //     setIsLoading(true);
-  //     await axios
-  //       .get(`${process.env.REACT_APP_BASE_URL}swap/get-dollar-price`, {
-  //         headers: {
-  //           Authorization: `Token ${localStorage.getItem("token")}`,
-  //         },
-  //       })
-  //       .then((response) => {
-  //         setTokenToNairaRate(parseFloat(response.data));
-  //         setIsLoading(false);
-  //         rate = parseFloat(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setIsLoading(false);
-  //         toast({
-  //           title: error.response.data.error,
-  //           status: "warning",
-  //         });
-  //       });
-  //   } else {
-  //     setIsLoading(true);
-  //     await axios
-  //       .get(
-  //         `${process.env.REACT_APP_BASE_URL}utilities/v2/naira/${currency}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Token ${localStorage.getItem("token")}`,
-  //           },
-  //         }
-  //       )
-  //       .then((response) => {
-  //         setTokenToNairaRate(parseFloat(response.data));
-  //         setIsLoading(false);
-  //         rate = parseFloat(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setIsLoading(false);
-  //         toast({
-  //           title: error.response.data.error,
-  //           status: "warning",
-  //         });
-  //       });
-  //   }
-
-  //   return rate;
-  // };
-  //   const handleCurrencyChange = (e) =>
-  // const handleCurrencyChange = async (e) => {
-  //   const network = e.target.value;
-  //   setCurrency(e.target.value);
-  //   for (let index = 0; index < userWallets.length; index++) {
-  //     if (userWallets[index][0] === network) {
-  //       setWalletBalance(userWallets[index][1].balance.availableBalance);
-  //     }
-  //   }
-  //   if (network === "btc") {
-  //     setMinAmount(5000);
-  //   } else {
-  //     setMinAmount(100);
-  //   }
-  //   const rate = await fetchRate(e.target.value);
-  //   // alert(currency);
-  //   if (network === "usdt_tron" || network === "cusd") {
-  //     setTokenAmount(nairaAmount / rate);
-  //   } else {
-  //     setTokenAmount(rate * nairaAmount);
-  //   }
-  // };
 
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>
@@ -186,7 +106,6 @@ export const AirtimeForm = (props: Props) => {
               fontSize={"16px"}
               type="tel"
               required
-              name="phone"
               minLength={11}
               maxLength={11}
               {...register("customer")}

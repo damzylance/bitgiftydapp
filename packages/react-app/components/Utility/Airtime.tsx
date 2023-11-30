@@ -22,7 +22,7 @@ import airtelLogo from "../../public/assets/airtel_logo.png";
 import nineMobileLogo from "../../public/assets/9mobile_logo.jpeg";
 import Image from "next/image";
 import { ProviderCard } from "../giftcard/ProviderCard";
-import { AirtimeForm } from "../giftcard/AirtimeForm";
+import { AirtimeForm } from "./AirtimeForm";
 
 type Props = { action: any };
 
