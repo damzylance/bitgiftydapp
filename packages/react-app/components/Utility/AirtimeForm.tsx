@@ -19,6 +19,10 @@ type Props = {
   back: any;
   telco: any;
 };
+type Inputs = {
+  customer: string;
+  amount: string;
+};
 
 export const AirtimeForm = (props: Props) => {
   const {
@@ -26,7 +30,7 @@ export const AirtimeForm = (props: Props) => {
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm();
+  } = useForm<Inputs>();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
