@@ -1,11 +1,36 @@
+import axios from "axios";
 import { ethers, Contract, BrowserProvider, parseEther } from "ethers";
 
 const CUSD_ADDRESS = process.env.NEXT_PUBLIC_MW as string;
 
 //Generate and send giftcard
 
-export const createGiftCard = async () => {};
+// interface MyObject {
+//   amount: string;
+//   receipent_email: string;
+//   address: string;
+//   note: string;
+//   image: string;
+// }
 
+export const sendGiftCard = async (data: object) => {
+  console.log(data);
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}create-giftcard`,
+      data
+    );
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error("Error:", error);
+    return error;
+  }
+};
+
+export const buyElectricity = () => {
+  console.log("electricity");
+};
 // Transfer cusd
 
 export const transferCUSD = async (

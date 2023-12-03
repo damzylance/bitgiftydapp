@@ -23,10 +23,11 @@ import Image from "next/image";
 import design from "../../public/assets/bitgifty-birthday01.jpg";
 import { useForm } from "react-hook-form";
 import { newKitFromWeb3 } from "@celo/contractkit";
-import { transferCUSD } from "@/utils/transaction";
+import { sendGiftCard, transferCUSD } from "@/utils/transaction";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 import GiftCardTemplate from "./GiftCardTemplate";
+import axios from "axios";
 
 type Props = {};
 
@@ -51,6 +52,11 @@ const CreateGiftCard = (props: Props) => {
     try {
       setLoading(true);
       const amount = data.amount;
+      data.currency = "cusd";
+      data.address = address;
+      console.log(data);
+
+      // Assuming 'transferCUSD' is a function that initiates a transfer and returns a response
       const response = await transferCUSD(
         "0x1d277449c7e389e50651feb7af2cdf96366474bf",
         userAddress,
@@ -58,9 +64,19 @@ const CreateGiftCard = (props: Props) => {
       );
 
       if (response.hash) {
-        toast({
-          title: "Giftcard created successfully and sent to recipient's email",
-        });
+        // Transaction successful, proceed to create the gift card
+        const giftCardResponse = await sendGiftCard(data); // Call to createGiftCard function
+
+        if (giftCardResponse?.status === 200) {
+          // Gift card created successfully
+          toast({
+            title:
+              "Gift card created successfully and sent to recipient's email",
+          });
+        } else {
+          // Handle error response from createGiftCard
+          toast({ title: "Failed to create gift card", status: "warning" });
+        }
       } else if (response.message.includes("ethers-user-denied")) {
         toast({ title: "User rejected transaction", status: "warning" });
       } else {
@@ -82,29 +98,27 @@ const CreateGiftCard = (props: Props) => {
   return (
     <GiftCardTemplate>
       <VStack width={"full"}>
-        <Image src={design} width={240} height={230} priority alt="" />
         <form
           action=""
           onSubmit={handleSubmit(createGiftCard)}
-          style={{ width: "100%", flex: "2" }}
+          style={{ width: "100%" }}
         >
           <VStack gap={"18px"} width={"full"}>
             {" "}
-            <FormControl>
+            <FormControl width={"full"}>
               <FormLabel>Select your gift card design</FormLabel>
-              <HStack
-                gap={"4px"}
-                width={["full", "full", "500px"]}
-                overflowX={"scroll"}
-              >
-                <Box _hover={{ border: "1px solid blue" }}>
-                  <Image
-                    src={design}
-                    alt="giftcard-design"
-                    width={80}
-                    height={70}
-                  />
-                </Box>
+              <HStack alignItems={"flex-start"} width={"full"} gap={"30px"}>
+                <Image src={design} width={250} height={235} priority alt="" />
+                <VStack gap={"4px"} height={"230px"} overflowY={"scroll"}>
+                  <Box _hover={{ border: "1px solid blue" }}>
+                    <Image
+                      src={design}
+                      alt="giftcard-design"
+                      width={80}
+                      height={70}
+                    />
+                  </Box>
+                </VStack>
               </HStack>
             </FormControl>
             <HStack width={"full"}>

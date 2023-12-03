@@ -20,7 +20,7 @@ import {
   MdPhoneInTalk,
   MdWifiTethering,
 } from "react-icons/md";
-import Airtime from "./Airtime";
+import Airtime from "./Airtime/Airtime";
 import { UtilityCard } from "./UtilityCard";
 import { UtilityModal } from "./UtilityModal";
 
