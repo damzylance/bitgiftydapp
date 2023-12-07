@@ -14,10 +14,13 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
+import { buyAirtime, transferCUSD } from "@/utils/transaction";
 type Inputs = {
   customer: string;
   amount: string;
   type: string;
+  email: string;
 };
 
 type Plan = { biller_name: string; amount: string };
@@ -29,32 +32,65 @@ export const DataForm = (props: any) => {
     getValues,
   } = useForm<Inputs>();
   const toast = useToast();
+  const { address, isConnected } = useAccount();
+
   const [isLoading, setIsLoading] = useState(false);
   const [walletBalance, setWalletBalance] = useState("null");
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
-  const [tokenToNairaRate, setTokenToNairaRate] = useState(0);
-  const [currency, setCurrency] = useState("");
+  const [tokenToNairaRate, setTokenToNairaRate] = useState(1100);
+  const [currency, setCurrency] = useState("cUSD");
   const [plans, setPlans] = useState([]);
   const [networkId, setNetworkId] = useState([]);
+  const [userAddress, setUserAddress] = useState("");
+
   const buyData = async (data: any) => {
-    data.amount = parseInt(data.type.split(",")[1]);
-    data.bill_type = data.type.split(",")[0];
-    data.country = "NG";
+    try {
+      setIsLoading(true);
+      data.amount = parseInt(data.type.split(",")[1]);
+      data.bill_type = data.type.split(",")[0];
+      delete data.type;
+      data.country = "NG";
+      data.chain = "cusd";
+      data.wallet_address = address;
+      console.log(data);
+
+      const response = await transferCUSD(userAddress, tokenAmount.toString());
+
+      if (response.hash) {
+        const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+        console.log(giftCardResponse);
+
+        if (giftCardResponse?.status === 200) {
+          // Gift card created successfully
+          toast({
+            title: "Data purchased succesfully",
+            status: "success",
+          });
+        } else {
+          toast({ title: "Error occured ", status: "warning" });
+        }
+      } else if (response.message.includes("ethers-user-denied")) {
+        toast({ title: "User rejected transaction", status: "warning" });
+      } else {
+        toast({ title: "An error occurred", status: "warning" });
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast({ title: error.message, status: "warning" });
+    } finally {
+      setIsLoading(false);
+    }
 
     // data.token_amount = data.data.split(",")[1];
     // delete data.network;
     // delete data.data;
   };
   const fetchDataPlans = async () => {
+    setIsLoading(true);
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}utilities/v2/get-bill-category?bill-type=data_bundle`,
-        {
-          headers: {
-            Authorization: `Token ${localStorage.getItem("token")}`,
-          },
-        }
+        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=data_bundle`
       )
       .then((response) => {
         setPlans(
@@ -66,7 +102,8 @@ export const DataForm = (props: any) => {
       })
       .catch((error) => {
         toast({
-          title: error.response.data.error,
+          title:
+            error.response?.data?.error || "Error occured fetching data plan",
           status: "warning",
         });
       });
@@ -131,10 +168,16 @@ export const DataForm = (props: any) => {
 
   const handlePlanChange = (e: any) => {
     const nairaAmount = parseInt(e.target.value.split(",")[1]);
-    setNairaAmount(parseInt(e.target.value.split(",")[1]));
-    setTokenAmount(tokenToNairaRate * nairaAmount);
+    setNairaAmount(nairaAmount);
+    setTokenAmount(nairaAmount / tokenToNairaRate);
   };
 
+  useEffect(() => {
+    if (isConnected && address) {
+      setUserAddress(address);
+    }
+    // fetchRates();
+  }, [address, isConnected]);
   useEffect(() => {
     fetchDataPlans();
   }, []);
@@ -232,7 +275,22 @@ export const DataForm = (props: any) => {
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl> */}
+          <FormControl>
+            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+              Email
+            </FormLabel>
 
+            <Input
+              border={"1px solid #f9f9f9"}
+              outline={"none"}
+              placeholder="Email address"
+              fontSize={"16px"}
+              type="email"
+              required
+              {...register("email")}
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
           <Button
             isLoading={isLoading}
             type="submit"

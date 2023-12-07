@@ -17,7 +17,10 @@ import { RxCardStack, RxPlus } from "react-icons/rx";
 import { MdRedeem } from "react-icons/md";
 import WidgetContainer from "../WidgetContainer";
 import GiftCardTemplate from "./GiftCardTemplate";
+import axios from "axios";
+import { useAccount } from "wagmi";
 function Reedeem() {
+  const { isConnected, address } = useAccount();
   const {
     register,
     handleSubmit,
@@ -25,6 +28,7 @@ function Reedeem() {
   } = useForm();
   const toast = useToast();
   const [confetti, setConfitti] = useState();
+  const [userAddres, setUserAddress] = useState("");
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined,
@@ -34,11 +38,26 @@ function Reedeem() {
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState([]);
 
-  const handleRedeem = async (data: object) => {
+  const handleRedeem = async (data: any) => {
+    setIsLoading(true);
+    data.address = address;
+    axios
+      .post(`${process.env.NEXT_PUBLIC_BASE_URL}redeem-giftcard/`, data)
+      .then((response) => {
+        setIsLoading(false);
+        console.log(response);
+        toast({ title: "Giftcard created redeemed successfully" });
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log(error);
+      });
     //handle redeeming
   };
   useEffect(() => {
-    //fetch template
+    if (isConnected && address) {
+      setUserAddress(address);
+    }
   }, []);
   return (
     <GiftCardTemplate>
@@ -56,7 +75,7 @@ function Reedeem() {
         )}
         <VStack gap={"5"} alignItems="flex-start" width={"full"}>
           <Text>Enter Your Gift Card Code</Text>
-          <form style={{ width: "100%" }}>
+          <form style={{ width: "100%" }} onSubmit={handleSubmit(handleRedeem)}>
             <VStack width={"full"} gap={"5"} alignItems="center">
               <Input
                 type={"text"}

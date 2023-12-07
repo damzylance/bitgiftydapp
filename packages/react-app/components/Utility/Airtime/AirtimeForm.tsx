@@ -1,3 +1,4 @@
+import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -11,8 +12,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAccount } from "wagmi";
 
 type Props = {
   onClose: any;
@@ -22,6 +24,7 @@ type Props = {
 type Inputs = {
   customer: string;
   amount: string;
+  email: string;
 };
 
 export const AirtimeForm = (props: Props) => {
@@ -35,28 +38,25 @@ export const AirtimeForm = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
   const [nairaAmount, setNairaAmount] = useState();
-  const [tokenToNairaRate, setTokenToNairaRate] = useState(0);
+  const [tokenToNairaRate, setTokenToNairaRate] = useState(1100);
   const [tokenAmount, setTokenAmount] = useState(0);
-  const [currency, setCurrency] = useState("");
+  const [currency, setCurrency] = useState("cusd");
   const [minAmount, setMinAmount] = useState("");
+  const [userAddress, setUserAddress] = useState("");
 
-  const buyAirtime = async (data: any) => {
-    data.bill_type = "AIRTIME";
-    data.country = "NG";
-    // data.token_amount = tokenAmount;
+  const { address, isConnected } = useAccount();
+  const fetchRates = async () => {
     setIsLoading(true);
     await axios
-      .post(
-        `${process.env.REACT_APP_BASE_URL}utilities/v2/initialize-payment/`,
-        data,
-        {
-          headers: { Authorization: `Token ${localStorage.getItem("token")}` },
-        }
-      )
+      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`, {
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      })
       .then((response) => {
+        setTokenToNairaRate(parseFloat(response.data));
         setIsLoading(false);
-        toast({ title: "Airtime purchase successful", status: "success" });
-        props.onClose();
+        // rate = parseFloat(response.data);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -66,7 +66,44 @@ export const AirtimeForm = (props: Props) => {
         });
       });
   };
+  // setInterval(fetchRates, 60000);
+  const rechargeAirtime = async (data: any) => {
+    try {
+      setIsLoading(true);
+      const amount = data.amount;
+      data.bill_type = "AIRTIME";
+      data.country = "NG";
+      data.chain = "cusd";
+      data.wallet_address = address;
+      console.log(data);
 
+      const response = await transferCUSD(userAddress, tokenAmount.toString());
+
+      if (response.hash) {
+        const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+        console.log(giftCardResponse);
+
+        if (giftCardResponse?.status === 200) {
+          // Gift card created successfully
+          toast({
+            title: "Airtime purchased succesfully",
+            status: "success",
+          });
+        } else {
+          toast({ title: "Error occured ", status: "warning" });
+        }
+      } else if (response.message.includes("ethers-user-denied")) {
+        toast({ title: "User rejected transaction", status: "warning" });
+      } else {
+        toast({ title: "An error occurred", status: "warning" });
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast({ title: error.message, status: "warning" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleAmountChange = (e: any) => {
     const tempNairaAmount = e.target.value;
     setNairaAmount(tempNairaAmount);
@@ -77,6 +114,12 @@ export const AirtimeForm = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    if (isConnected && address) {
+      setUserAddress(address);
+    }
+    // fetchRates();
+  }, [address, isConnected]);
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>
       <HStack width={"full"} alignItems={"center"}>
@@ -97,7 +140,7 @@ export const AirtimeForm = (props: Props) => {
         </HStack>
       </HStack>
 
-      <form style={{ width: "100%" }} onSubmit={handleSubmit(buyAirtime)}>
+      <form style={{ width: "100%" }} onSubmit={handleSubmit(rechargeAirtime)}>
         <VStack width={"full"} gap={"20px"}>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
@@ -109,6 +152,7 @@ export const AirtimeForm = (props: Props) => {
               outline={"none"}
               fontSize={"16px"}
               type="tel"
+              placeholder="080***"
               required
               minLength={11}
               maxLength={11}
@@ -118,7 +162,7 @@ export const AirtimeForm = (props: Props) => {
           </FormControl>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Amount
+              Amount (&#8358;)
             </FormLabel>
 
             <Input
@@ -126,6 +170,7 @@ export const AirtimeForm = (props: Props) => {
               outline={"none"}
               fontSize={"16px"}
               type="number"
+              placeholder="100"
               required
               {...register("amount", {
                 onChange: handleAmountChange,

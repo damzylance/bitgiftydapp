@@ -30,6 +30,9 @@ import GiftCardTemplate from "./GiftCardTemplate";
 import axios from "axios";
 
 type Props = {};
+interface GiftCardResponse {
+  status: number;
+}
 
 const CreateGiftCard = (props: Props) => {
   const toast = useToast();
@@ -46,35 +49,52 @@ const CreateGiftCard = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [fee, setFee] = useState("1");
   const [checkEmail, setCheckEmail] = useState(false);
+  const [templatesLoading, setTemplatesLoading] = useState(true);
+  const [templates, setTemplates] = useState([]);
+  const [template, setTemplate] = useState({ link: "", id: "" });
   const amountMin = 0.1;
+
+  const fetchTemplates = async () => {
+    setLoading(true);
+
+    await axios
+      .get(`https://server.bitgifty.com/gift_cards/images`)
+      .then((response) => {
+        setLoading(false);
+        setTemplates(response.data.results);
+        setTemplate({
+          link: response.data.results[0].link,
+          id: response.data.results[0].id,
+        });
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast({ title: error.response?.data?.error, status: "error" });
+      });
+  };
 
   const createGiftCard = async (data: any) => {
     try {
       setLoading(true);
       const amount = data.amount;
+      data.image = 1;
       data.currency = "cusd";
       data.address = address;
       console.log(data);
 
-      // Assuming 'transferCUSD' is a function that initiates a transfer and returns a response
-      const response = await transferCUSD(
-        "0x1d277449c7e389e50651feb7af2cdf96366474bf",
-        userAddress,
-        data.amount
-      );
+      const response = await transferCUSD(userAddress, data.amount);
 
       if (response.hash) {
-        // Transaction successful, proceed to create the gift card
-        const giftCardResponse = await sendGiftCard(data); // Call to createGiftCard function
+        const giftCardResponse: any = await sendGiftCard(data); // Call to createGiftCard function
+        console.log(giftCardResponse);
 
-        if (giftCardResponse?.status === 200) {
+        if (giftCardResponse?.status === 201) {
           // Gift card created successfully
           toast({
             title:
               "Gift card created successfully and sent to recipient's email",
           });
         } else {
-          // Handle error response from createGiftCard
           toast({ title: "Failed to create gift card", status: "warning" });
         }
       } else if (response.message.includes("ethers-user-denied")) {
@@ -94,6 +114,7 @@ const CreateGiftCard = (props: Props) => {
     if (isConnected && address) {
       setUserAddress(address);
     }
+    fetchTemplates();
   }, [address, isConnected]);
   return (
     <GiftCardTemplate>
@@ -108,16 +129,37 @@ const CreateGiftCard = (props: Props) => {
             <FormControl width={"full"}>
               <FormLabel>Select your gift card design</FormLabel>
               <HStack alignItems={"flex-start"} width={"full"} gap={"30px"}>
-                <Image src={design} width={250} height={235} priority alt="" />
+                <Image
+                  src={template.link}
+                  width={250}
+                  height={235}
+                  priority
+                  alt=""
+                />
                 <VStack gap={"4px"} height={"230px"} overflowY={"scroll"}>
-                  <Box _hover={{ border: "1px solid blue" }}>
-                    <Image
-                      src={design}
-                      alt="giftcard-design"
-                      width={80}
-                      height={70}
-                    />
-                  </Box>
+                  {templates.length > 1 &&
+                    templates.map((image: any, id) => {
+                      return (
+                        <Box
+                          _hover={{ border: "1px solid blue" }}
+                          border={
+                            image.link === template.link ? "1px solid #fff" : ""
+                          }
+                          key={id}
+                        >
+                          <Image
+                            src={image.link}
+                            alt="giftcard-design"
+                            width={80}
+                            height={70}
+                            style={{ objectFit: "contain" }}
+                            onClick={() => {
+                              setTemplate({ link: image.link, id: image.id });
+                            }}
+                          />
+                        </Box>
+                      );
+                    })}
                 </VStack>
               </HStack>
             </FormControl>
