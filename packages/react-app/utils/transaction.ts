@@ -3,6 +3,7 @@ import { ethers, Contract, BrowserProvider, parseEther } from "ethers";
 
 const CUSD_ADDRESS = process.env.NEXT_PUBLIC_SC as string;
 
+alert(CUSD_ADDRESS);
 //Generate and send giftcard
 
 // interface MyObject {
