@@ -40,7 +40,8 @@ const Electricity = (props: any) => {
           </Text>
           <VStack width={"full"} gap={"10px"}>
             {merchants.length > 0
-              ? merchants.map((provider, id) => {
+              ? merchants.map((provider: any, id) => {
+                  provider.link = powerIcon;
                   return (
                     <ProviderCard
                       key={id}
@@ -50,7 +51,7 @@ const Electricity = (props: any) => {
                         setMerchantName(provider.name);
                       }}
                       name={provider.name}
-                      logo={powerIcon}
+                      logo={provider.link}
                     />
                   );
                 })
