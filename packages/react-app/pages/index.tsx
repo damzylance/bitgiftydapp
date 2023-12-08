@@ -21,6 +21,7 @@ export default function Home({}) {
       {isConnected && (
         <div className="h2 text-center">Your address: {userAddress}</div>
       )}
+      {process.env.NEXT_PUBLIC_SC}
     </div>
   );
 }
