@@ -40,6 +40,7 @@ function MyCards() {
         setCards(response.data.results);
       })
       .catch((error) => {
+        setLoading(false);
         toast({ title: "Error fetching cards", status: "warning" });
       });
   };
@@ -52,9 +53,11 @@ function MyCards() {
         },
       })
       .then((response) => {
+        setLoading(false);
         setTemplates(response.data.results);
       })
       .catch((error) => {
+        setLoading(false);
         toast({ title: "Error fetching templates", status: "warning" });
       });
   };

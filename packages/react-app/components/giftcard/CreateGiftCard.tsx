@@ -11,6 +11,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   Text,
   Textarea,
   Toast,
@@ -61,6 +62,7 @@ const CreateGiftCard = (props: Props) => {
       .get(`https://server.bitgifty.com/gift_cards/images`)
       .then((response) => {
         setLoading(false);
+        setTemplatesLoading(false);
         setTemplates(response.data.results);
         setTemplate({
           link: response.data.results[0].link,
@@ -68,6 +70,7 @@ const CreateGiftCard = (props: Props) => {
         });
       })
       .catch((error) => {
+        setTemplatesLoading(false);
         setLoading(false);
         toast({ title: error.response?.data?.error, status: "error" });
       });
@@ -128,40 +131,46 @@ const CreateGiftCard = (props: Props) => {
             {" "}
             <FormControl width={"full"}>
               <FormLabel>Select your gift card design</FormLabel>
-              <HStack alignItems={"flex-start"} width={"full"} gap={"30px"}>
-                <Image
-                  src={template.link}
-                  width={250}
-                  height={235}
-                  priority
-                  alt=""
-                />
-                <VStack gap={"4px"} height={"230px"} overflowY={"scroll"}>
-                  {templates.length > 1 &&
-                    templates.map((image: any, id) => {
-                      return (
-                        <Box
-                          _hover={{ border: "1px solid blue" }}
-                          border={
-                            image.link === template.link ? "1px solid #fff" : ""
-                          }
-                          key={id}
-                        >
-                          <Image
-                            src={image.link}
-                            alt="giftcard-design"
-                            width={80}
-                            height={70}
-                            style={{ objectFit: "contain" }}
-                            onClick={() => {
-                              setTemplate({ link: image.link, id: image.id });
-                            }}
-                          />
-                        </Box>
-                      );
-                    })}
-                </VStack>
-              </HStack>
+              {templatesLoading ? (
+                <Spinner />
+              ) : (
+                <HStack alignItems={"flex-start"} width={"full"} gap={"30px"}>
+                  <Image
+                    src={template.link}
+                    width={250}
+                    height={235}
+                    priority
+                    alt=""
+                  />
+                  <VStack gap={"4px"} height={"230px"} overflowY={"scroll"}>
+                    {templates.length > 1 &&
+                      templates.map((image: any, id) => {
+                        return (
+                          <Box
+                            _hover={{ border: "1px solid blue" }}
+                            border={
+                              image.link === template.link
+                                ? "1px solid #fff"
+                                : ""
+                            }
+                            key={id}
+                          >
+                            <Image
+                              src={image.link}
+                              alt="giftcard-design"
+                              width={80}
+                              height={70}
+                              style={{ objectFit: "contain" }}
+                              onClick={() => {
+                                setTemplate({ link: image.link, id: image.id });
+                              }}
+                            />
+                          </Box>
+                        );
+                      })}
+                  </VStack>
+                </HStack>
+              )}
             </FormControl>
             <HStack width={"full"}>
               {" "}
