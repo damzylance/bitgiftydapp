@@ -11,7 +11,7 @@ const MenuCard = (props: Props) => {
       <VStack
         width={"148px"}
         height={"168px"}
-        bg={"#DBF5FB"}
+        bg={"#103D96"}
         boxShadow={"0px 2px 2px 0px rgba(0, 0, 0, 0.10)"}
         borderRadius={"16px"}
         position={"relative"}
@@ -46,7 +46,7 @@ const MenuCard = (props: Props) => {
                 filterUnits="userSpaceOnUse"
                 color-interpolation-filters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImageFix" stdDeviation="17.5" />
                 <feComposite
                   in2="SourceAlpha"
@@ -66,7 +66,7 @@ const MenuCard = (props: Props) => {
         <VStack
           width={"70px"}
           height={"70px"}
-          bg={"#103D96"}
+          bg={"#DBF5FB"}
           borderRadius={"8px"}
           position={"relative"}
           justifyContent={"center"}
@@ -96,7 +96,7 @@ const MenuCard = (props: Props) => {
                   filterUnits="userSpaceOnUse"
                   color-interpolation-filters="sRGB"
                 >
-                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
                   <feGaussianBlur in="BackgroundImageFix" stdDeviation="17.5" />
                   <feComposite
                     in2="SourceAlpha"
@@ -139,7 +139,7 @@ const MenuCard = (props: Props) => {
                   filterUnits="userSpaceOnUse"
                   color-interpolation-filters="sRGB"
                 >
-                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
                   <feGaussianBlur in="BackgroundImageFix" stdDeviation="17.5" />
                   <feComposite
                     in2="SourceAlpha"
@@ -185,7 +185,7 @@ const MenuCard = (props: Props) => {
                   filterUnits="userSpaceOnUse"
                   color-interpolation-filters="sRGB"
                 >
-                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
                   <feGaussianBlur in="BackgroundImageFix" stdDeviation="17.5" />
                   <feComposite
                     in2="SourceAlpha"
@@ -207,7 +207,7 @@ const MenuCard = (props: Props) => {
           fontSize={"16px"}
           width={"68px"}
           textAlign={"center"}
-          color={"#103D96"}
+          color={"#fff"}
           fontWeight={"600"}
         >
           {props.title}
@@ -241,7 +241,7 @@ const MenuCard = (props: Props) => {
                 filterUnits="userSpaceOnUse"
                 color-interpolation-filters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImageFix" stdDeviation="17.5" />
                 <feComposite
                   in2="SourceAlpha"
