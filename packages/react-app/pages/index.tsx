@@ -24,14 +24,14 @@ export default function Home({}) {
     <VStack width={"full"} mt={"20px"} gap={"40px"}>
       <HStack gap={"18px"}>
         <MenuCard
-          link="/giftcard/create"
-          icon={gitfcardIcon}
-          title={"Create GiftCard"}
-        />
-        <MenuCard
           link="/giftcard/redeem"
           icon={redeemIcon}
           title={"Redeem GiftCard"}
+        />
+        <MenuCard
+          link="/giftcard/create"
+          icon={gitfcardIcon}
+          title={"Create GiftCard"}
         />
       </HStack>
       <Link href={"/spend"}>

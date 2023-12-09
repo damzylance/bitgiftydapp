@@ -50,6 +50,13 @@ function Reedeem() {
       })
       .catch((error) => {
         setIsLoading(false);
+        toast({
+          title:
+            error?.response?.data?.error ||
+            error?.message ||
+            "An error occured",
+          status: "warning",
+        });
         console.log(error);
       });
     //handle redeeming
