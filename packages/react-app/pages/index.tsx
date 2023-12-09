@@ -26,12 +26,12 @@ export default function Home({}) {
         <MenuCard
           link="/giftcard/create"
           icon={gitfcardIcon}
-          title={"Redeem GiftCard"}
+          title={"Create GiftCard"}
         />
         <MenuCard
           link="/giftcard/redeem"
           icon={redeemIcon}
-          title={"Create GiftCard"}
+          title={"Redeem GiftCard"}
         />
       </HStack>
       <Link href={"/spend"}>
@@ -276,7 +276,7 @@ export default function Home({}) {
                   width="150.631"
                   height="156.724"
                   filterUnits="userSpaceOnUse"
-                  color-interpolation-filters="sRGB"
+                  colorInterpolation-filters="sRGB"
                 >
                   <feFlood flood-opacity="0" result="BackgroundImageFix" />
                   <feGaussianBlur in="BackgroundImageFix" stdDeviation="17.5" />
