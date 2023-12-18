@@ -298,13 +298,13 @@ export default function Home({}) {
         </HStack>
       </Link>
 
-      <div className="h1">
+      {/* <div className="h1">
         There you go... a canvas for your next Celo project!
       </div>
       {isConnected && (
         <div className="h2 text-center">Your address: {userAddress}</div>
       )}
-      {process.env.NEXT_PUBLIC_SC}
+      {process.env.NEXT_PUBLIC_SC} */}
     </VStack>
   );
 }
