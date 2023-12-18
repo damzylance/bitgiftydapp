@@ -41,7 +41,7 @@ const WidgetContainer: FC<Props> = ({ children }) => {
           justifyContent={"space-between"}
         >
           <Image alt="logo" style={{ width: "80px" }} src={logo} />
-          <HStack>
+          <HStack gap={"20px"}>
             <Link href={"/giftcard/create"}>
               <Text
                 color={"#fff"}

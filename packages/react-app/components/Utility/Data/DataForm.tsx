@@ -275,22 +275,7 @@ export const DataForm = (props: any) => {
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl> */}
-          <FormControl>
-            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Email
-            </FormLabel>
 
-            <Input
-              border={"1px solid #f9f9f9"}
-              outline={"none"}
-              placeholder="Email address"
-              fontSize={"16px"}
-              type="email"
-              required
-              {...register("email")}
-            />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
           <Button
             isLoading={isLoading}
             type="submit"

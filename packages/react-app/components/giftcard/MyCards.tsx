@@ -21,20 +21,21 @@ import {
 } from "@chakra-ui/react";
 import GiftCardTemplate from "./GiftCardTemplate";
 import Image from "next/image";
+import { useAccount } from "wagmi";
+import { templates } from "@/utils/templates";
 
 function MyCards() {
   const toast = useToast();
   const [cards, setCards] = useState([]);
-  const [templates, setTemplates] = useState([{ link: "", id: "" }]);
+
   const [loading, setLoading] = useState(true);
+  const { address, isConnected } = useAccount();
 
   const fetchCards = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}gift_cards/v2/create`, {
-        headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
-      })
+      .get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}create-giftcard?address=${address}`
+      )
       .then((response) => {
         setLoading(false);
         setCards(response.data.results);
@@ -45,26 +46,11 @@ function MyCards() {
       });
   };
 
-  const fetchCardTemplates = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_BASE_URL}gift_cards/images`, {
-        headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((response) => {
-        setLoading(false);
-        setTemplates(response.data.results);
-      })
-      .catch((error) => {
-        setLoading(false);
-        toast({ title: "Error fetching templates", status: "warning" });
-      });
-  };
   useEffect(() => {
-    fetchCards();
-    fetchCardTemplates();
-  }, []);
+    if (isConnected && address) {
+      fetchCards();
+    }
+  }, [address, isConnected]);
   return (
     <GiftCardTemplate>
       <Box mt={"30px"} cursor={"pointer"}>
@@ -80,6 +66,8 @@ function MyCards() {
               for (let x = 0; x < templates.length; x++) {
                 if (card.image === templates[x].id) {
                   link = templates[x].link;
+                } else if (card.image < templates[x].id) {
+                  link = templates[8].link;
                 }
               }
               return (
@@ -183,7 +171,17 @@ const CardModal = (props: any) => {
         </Text>
         <ModalHeader textAlign={"center"}>View Gift Card</ModalHeader>
         <ModalBody>
-          <Image alt="" src={props.image} />
+          <VStack width={"full"} alignItems={"center"}>
+            {" "}
+            <Image
+              style={{ textAlign: "center" }}
+              alt=""
+              width={300}
+              height={200}
+              src={props.image}
+            />
+          </VStack>
+
           <HStack width={"full"} justifyContent={"center"} gap={"10px"}>
             <Text>Amount:</Text>
             <HStack>

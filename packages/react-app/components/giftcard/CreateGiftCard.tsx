@@ -29,6 +29,8 @@ import { useAccount } from "wagmi";
 import Link from "next/link";
 import GiftCardTemplate from "./GiftCardTemplate";
 import axios from "axios";
+import Confetti from "react-confetti";
+import { templates } from "@/utils/templates";
 
 type Props = {};
 interface GiftCardResponse {
@@ -48,33 +50,11 @@ const CreateGiftCard = (props: Props) => {
 
   const [totalAmount, setTotalAmount] = useState();
   const [loading, setLoading] = useState(false);
+  const [confetti, setConfitti] = useState(false);
   const [fee, setFee] = useState("1");
   const [checkEmail, setCheckEmail] = useState(false);
-  const [templatesLoading, setTemplatesLoading] = useState(true);
-  const [templates, setTemplates] = useState([]);
   const [template, setTemplate] = useState({ link: "", id: "" });
   const amountMin = 0.1;
-
-  const fetchTemplates = async () => {
-    setLoading(true);
-
-    await axios
-      .get(`https://server.bitgifty.com/gift_cards/images`)
-      .then((response) => {
-        setLoading(false);
-        setTemplatesLoading(false);
-        setTemplates(response.data.results);
-        setTemplate({
-          link: response.data.results[0].link,
-          id: response.data.results[0].id,
-        });
-      })
-      .catch((error) => {
-        setTemplatesLoading(false);
-        setLoading(false);
-        toast({ title: error.response?.data?.error, status: "error" });
-      });
-  };
 
   const createGiftCard = async (data: any) => {
     try {
@@ -88,18 +68,26 @@ const CreateGiftCard = (props: Props) => {
       const response = await transferCUSD(userAddress, data.amount);
 
       if (response.hash) {
-        const giftCardResponse: any = await sendGiftCard(data); // Call to createGiftCard function
-        console.log(giftCardResponse);
+        setLoading(false);
+        toast({ title: "Giftcard created successfully", status: "warning" });
+        setConfitti(true);
+        setTimeout(() => {
+          setConfitti(false);
+          //  navigate("/giftcard/cards");
+        }, 5000);
 
-        if (giftCardResponse?.status === 201) {
-          // Gift card created successfully
-          toast({
-            title:
-              "Gift card created successfully and sent to recipient's email",
-          });
-        } else {
-          toast({ title: "Failed to create gift card", status: "warning" });
-        }
+        // const giftCardResponse: any = await sendGiftCard(data); // Call to createGiftCard function
+        // console.log(giftCardResponse);
+
+        // if (giftCardResponse?.status === 201) {
+        //   // Gift card created successfully
+        //   toast({
+        //     title:
+        //       "Gift card created successfully and sent to recipient's email",
+        //   });
+        // } else {
+        //   toast({ title: "Failed to create gift card", status: "warning" });
+        // }
       } else if (response.message.includes("ethers-user-denied")) {
         toast({ title: "User rejected transaction", status: "warning" });
       } else {
@@ -117,11 +105,11 @@ const CreateGiftCard = (props: Props) => {
     if (isConnected && address) {
       setUserAddress(address);
     }
-    fetchTemplates();
   }, [address, isConnected]);
   return (
     <GiftCardTemplate>
       <VStack width={"full"}>
+        {confetti && <Confetti />}
         <form
           action=""
           onSubmit={handleSubmit(createGiftCard)}
@@ -131,46 +119,41 @@ const CreateGiftCard = (props: Props) => {
             {" "}
             <FormControl width={"full"}>
               <FormLabel>Select your gift card design</FormLabel>
-              {templatesLoading ? (
-                <Spinner />
-              ) : (
-                <HStack alignItems={"flex-start"} width={"full"} gap={"30px"}>
-                  <Image
-                    src={template.link}
-                    width={250}
-                    height={235}
-                    priority
-                    alt=""
-                  />
-                  <VStack gap={"4px"} height={"230px"} overflowY={"scroll"}>
-                    {templates.length > 1 &&
-                      templates.map((image: any, id) => {
-                        return (
-                          <Box
-                            _hover={{ border: "1px solid blue" }}
-                            border={
-                              image.link === template.link
-                                ? "1px solid #fff"
-                                : ""
-                            }
-                            key={id}
-                          >
-                            <Image
-                              src={image.link}
-                              alt="giftcard-design"
-                              width={80}
-                              height={70}
-                              style={{ objectFit: "contain" }}
-                              onClick={() => {
-                                setTemplate({ link: image.link, id: image.id });
-                              }}
-                            />
-                          </Box>
-                        );
-                      })}
-                  </VStack>
-                </HStack>
-              )}
+
+              <HStack alignItems={"flex-start"} width={"full"} gap={"30px"}>
+                <Image
+                  src={templates[9].link}
+                  width={250}
+                  height={235}
+                  priority
+                  alt=""
+                />
+                <VStack gap={"4px"} height={"230px"} overflowY={"scroll"}>
+                  {templates.length > 1 &&
+                    templates.map((image: any, id) => {
+                      return (
+                        <Box
+                          _hover={{ border: "1px solid blue" }}
+                          border={
+                            image.link === template.link ? "1px solid #fff" : ""
+                          }
+                          key={id}
+                        >
+                          <Image
+                            src={image.link}
+                            alt="giftcard-design"
+                            width={80}
+                            height={70}
+                            style={{ objectFit: "contain" }}
+                            onClick={() => {
+                              setTemplate({ link: image.link, id: image.id });
+                            }}
+                          />
+                        </Box>
+                      );
+                    })}
+                </VStack>
+              </HStack>
             </FormControl>
             <HStack width={"full"}>
               {" "}
