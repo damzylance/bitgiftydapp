@@ -9,7 +9,7 @@ import {
   HStack,
   Flex,
 } from "@chakra-ui/react";
-import { ReactConfetti } from "react-confetti";
+import Confetti from "react-confetti";
 
 import { useForm } from "react-hook-form";
 // import axios from "axios";
@@ -27,7 +27,7 @@ function Reedeem() {
     formState: { errors },
   } = useForm();
   const toast = useToast();
-  const [confetti, setConfitti] = useState();
+  const [confetti, setConfetti] = useState(false);
   const [userAddres, setUserAddress] = useState("");
   const [windowSize, setWindowSize] = useState({
     width: undefined,
@@ -45,8 +45,12 @@ function Reedeem() {
       .post(`${process.env.NEXT_PUBLIC_BASE_URL}redeem-giftcard/`, data)
       .then((response) => {
         setIsLoading(false);
-        console.log(response);
         toast({ title: "Giftcard created redeemed successfully" });
+        setConfetti(true);
+        setTimeout(() => {
+          setConfetti(false);
+          //  navigate("/giftcard/cards");
+        }, 5000);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -77,9 +81,7 @@ function Reedeem() {
         mt="10"
         mb="5"
       >
-        {confetti && (
-          <ReactConfetti width={windowSize.width} height={windowSize.height} />
-        )}
+        {confetti && <Confetti />}
         <VStack gap={"5"} alignItems="flex-start" width={"full"}>
           <Text>Enter Your Gift Card Code</Text>
           <form style={{ width: "100%" }} onSubmit={handleSubmit(handleRedeem)}>
