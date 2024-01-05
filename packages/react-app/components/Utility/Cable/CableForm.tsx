@@ -10,7 +10,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { ProviderCard } from "@/components/giftcard/ProviderCard";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -128,6 +127,8 @@ export const CableForm = (props: any) => {
     data.country = "NG";
     data.bill_type = data.plan.split(",")[0];
     data.amount = data.plan.split(",")[1];
+    data.crypto_amount = tokenAmount;
+
     delete data.plan;
     console.log(data);
     //

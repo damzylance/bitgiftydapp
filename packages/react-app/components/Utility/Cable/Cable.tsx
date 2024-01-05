@@ -1,10 +1,10 @@
 import { Text, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { ProviderCard } from "@/components/giftcard/ProviderCard";
 import { CableForm } from "./CableForm";
 import dstvLogo from "../../../public/assets/dstv.png";
 import gotvLogo from "../../../public/assets/gotv.png";
 import startimesLogo from "../../../public/assets/startimes.png";
+import { ProviderCard } from "../ProviderCard";
 
 const Cable = (props: any) => {
   const [page, setPage] = useState("list");

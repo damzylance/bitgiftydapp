@@ -53,11 +53,14 @@ export const DataForm = (props: any) => {
       data.country = "NG";
       data.chain = "cusd";
       data.wallet_address = address;
+      data.crypto_amount = tokenAmount;
+
       console.log(data);
 
       const response = await transferCUSD(userAddress, tokenAmount.toString());
 
       if (response.hash) {
+        data.transaction_hash = response.hash;
         const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
         console.log(giftCardResponse);
 
@@ -109,61 +112,24 @@ export const DataForm = (props: any) => {
       });
   };
 
-  const fetchRate = async (currency: string) => {
-    let rate;
-    if (currency === "btc") {
-      currency = "bitcoin";
-    }
-
-    if (currency === "naira") {
-      rate = 1;
-      setTokenToNairaRate(parseFloat("1"));
-    } else if (currency === "usdt_tron" || currency === "cusd") {
-      setIsLoading(true);
-      await axios
-        .get(`${process.env.REACT_APP_BASE_URL}swap/get-dollar-price`, {
-          headers: {
-            Authorization: `Token ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          setTokenToNairaRate(parseFloat(response.data));
-          setIsLoading(false);
-          rate = parseFloat(response.data);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          toast({
-            title: error.response.data.error,
-            status: "warning",
-          });
+  const fetchRates = async () => {
+    setIsLoading(true);
+    await axios
+      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
+      .then((response) => {
+        console.log(response);
+        setTokenToNairaRate(parseFloat(response.data));
+        setIsLoading(false);
+        // rate = parseFloat(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        toast({
+          title: error.response.data.error,
+          status: "warning",
         });
-    } else {
-      setIsLoading(true);
-      await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}utilities/v2/naira/${currency}`,
-          {
-            headers: {
-              Authorization: `Token ${localStorage.getItem("token")}`,
-            },
-          }
-        )
-        .then((response) => {
-          setTokenToNairaRate(parseFloat(response.data));
-          setIsLoading(false);
-          rate = parseFloat(response.data);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          toast({
-            title: error.response.data.error,
-            status: "warning",
-          });
-        });
-    }
-
-    return rate;
+      });
   };
 
   const handlePlanChange = (e: any) => {
@@ -176,7 +142,7 @@ export const DataForm = (props: any) => {
     if (isConnected && address) {
       setUserAddress(address);
     }
-    // fetchRates();
+    fetchRates();
   }, [address, isConnected]);
   useEffect(() => {
     fetchDataPlans();

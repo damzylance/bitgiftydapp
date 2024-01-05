@@ -48,17 +48,15 @@ export const AirtimeForm = (props: Props) => {
   const fetchRates = async () => {
     setIsLoading(true);
     await axios
-      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`, {
-        headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
-      })
+      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
       .then((response) => {
+        console.log(response);
         setTokenToNairaRate(parseFloat(response.data));
         setIsLoading(false);
         // rate = parseFloat(response.data);
       })
       .catch((error) => {
+        console.log(error);
         setIsLoading(false);
         toast({
           title: error.response.data.error,
@@ -66,6 +64,7 @@ export const AirtimeForm = (props: Props) => {
         });
       });
   };
+
   // setInterval(fetchRates, 60000);
   const rechargeAirtime = async (data: any) => {
     try {
@@ -75,11 +74,11 @@ export const AirtimeForm = (props: Props) => {
       data.country = "NG";
       data.chain = "cusd";
       data.wallet_address = address;
-      console.log(data);
-
+      data.crypto_amount = tokenAmount;
       const response = await transferCUSD(userAddress, tokenAmount.toString());
-
       if (response.hash) {
+        data.transaction_hash = response.hash;
+        console.log(data);
         const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
         console.log(giftCardResponse);
 
@@ -89,6 +88,7 @@ export const AirtimeForm = (props: Props) => {
             title: "Airtime purchased succesfully",
             status: "success",
           });
+          props.onClose();
         } else {
           toast({ title: "Error occured ", status: "warning" });
         }
@@ -117,8 +117,8 @@ export const AirtimeForm = (props: Props) => {
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
+      fetchRates();
     }
-    // fetchRates();
   }, [address, isConnected]);
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>

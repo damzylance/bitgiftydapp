@@ -61,12 +61,14 @@ export const PowerForm = (props: any) => {
       data.bill_type = props.name;
       data.country = "NG";
       data.chain = "cusd";
+      data.crypto_amount = tokenAmount;
       data.wallet_address = address;
       console.log(data);
 
       const response = await transferCUSD(userAddress, tokenAmount.toString());
 
       if (response.hash) {
+        data.transaction_hash = response.hash;
         const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
         console.log("electricity", giftCardResponse);
 
@@ -93,94 +95,31 @@ export const PowerForm = (props: any) => {
     }
   };
 
-  const fetchRate = async (currency: string) => {
-    let rate;
-    if (currency === "btc") {
-      currency = "bitcoin";
-    }
-
-    if (currency === "naira") {
-      rate = 1;
-      setTokenToNairaRate(parseFloat("1"));
-    } else if (currency === "usdt_tron" || currency === "cusd") {
-      setIsLoading(true);
-      await axios
-        .get(`${process.env.REACT_APP_BASE_URL}swap/get-dollar-price`, {
-          headers: {
-            Authorization: `Token ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          setTokenToNairaRate(parseFloat(response.data));
-          setIsLoading(false);
-          rate = parseFloat(response.data);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          toast({
-            title: error.response.data.error,
-            status: "warning",
-          });
+  const fetchRates = async () => {
+    setIsLoading(true);
+    await axios
+      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
+      .then((response) => {
+        console.log(response);
+        setTokenToNairaRate(parseFloat(response.data));
+        setIsLoading(false);
+        // rate = parseFloat(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        toast({
+          title: error.response.data.error,
+          status: "warning",
         });
-    } else {
-      setIsLoading(true);
-      await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}utilities/v2/naira/${currency}`,
-          {
-            headers: {
-              Authorization: `Token ${localStorage.getItem("token")}`,
-            },
-          }
-        )
-        .then((response) => {
-          setTokenToNairaRate(parseFloat(response.data));
-          setIsLoading(false);
-          rate = parseFloat(response.data);
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          toast({
-            title: error.response.data.error,
-            status: "warning",
-          });
-        });
-    }
-
-    return rate;
+      });
   };
 
-  //   setIsLoading(true);
-  //   axios
-  //     .get(
-  //       `${process.env.REACT_APP_BASE_URL}utilities/v2/get-bill-category?bill-type=power`,
-  //       {
-  //         headers: {
-  //           Authorization: `Token ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log(response);
-  //       setIsLoading(false);
-
-  //       setPlans(
-  //         response.data.data.filter((plan) => {
-  //           return plan.biller_code === props.cable;
-  //         })
-  //       );
-  //     })
-  //     .catch((error) => {});
-  // }, []);
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
+      fetchRates();
     }
-    axios
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories/`)
-      .then((response) => console.table(response))
-      .catch((error) => console.log(error));
-    // fetchRates();
   }, [address, isConnected]);
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>

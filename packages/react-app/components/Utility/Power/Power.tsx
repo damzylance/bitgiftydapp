@@ -1,16 +1,16 @@
 import { Text, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { ProviderCard } from "@/components/giftcard/ProviderCard";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { PowerForm } from "./PowerForm";
 import powerIcon from "../../../public/assets/idea.png";
+import { ProviderCard } from "../ProviderCard";
 
 const Electricity = (props: any) => {
   const [page, setPage] = useState("list");
   const [merchants, setMerchants] = useState([
-    { name: "IKEDC PREPAID", id: "BIL113" },
+    { name: "IKEDC  PREPAID", id: "BIL113" },
     { name: "EKEDC PREPAID TOPUP", id: "BIL112" },
     {
       name: "ABUJA DISCO Prepaid",

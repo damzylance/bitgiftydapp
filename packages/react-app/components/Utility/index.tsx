@@ -23,13 +23,18 @@ import {
 import Airtime from "./Airtime/Airtime";
 import { UtilityCard } from "./UtilityCard";
 import { UtilityModal } from "./UtilityModal";
+import Link from "next/link";
+import { ChevronRightIcon } from "@chakra-ui/icons";
 
 const Utility = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [type, setType] = useState("");
   return (
-    <Container mt={"40px"}>
+    <Container>
+      <Text textAlign={"center"} fontWeight={"500"} mb={"20px"}>
+        Bills Payment
+      </Text>
       <Grid
         width={"full"}
         templateColumns="repeat(2, 1fr)"
@@ -71,6 +76,12 @@ const Utility = () => {
           }}
         />
       </Grid>
+      <Link href={"/transaction-history"}>
+        <HStack width={"full"} justifyContent={"center"} mt={"40px"}>
+          <Text fontSize={"sm"}>Transaction History</Text>
+          <ChevronRightIcon fontSize={"lg"} />
+        </HStack>
+      </Link>
       <UtilityModal type={type} isOpen={isOpen} onClose={onClose} />
     </Container>
   );

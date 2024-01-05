@@ -15,12 +15,12 @@ import {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { ProviderCard } from "@/components/giftcard/ProviderCard";
 import { DataForm } from "./DataForm";
 import mtnLogo from "../../../public/assets/mtn_logo.png";
 import gloLogo from "../../../public/assets/glo_logo.webp";
 import airtelLogo from "../../../public/assets/airtel_logo.png";
 import nineMobileLogo from "../../../public/assets/9mobile_logo.jpeg";
+import { ProviderCard } from "../ProviderCard";
 const Data = (props: any) => {
   const telcos = [
     { name: "mtn", logo: mtnLogo, id: "BIL108" },

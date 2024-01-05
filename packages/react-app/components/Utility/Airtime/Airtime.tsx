@@ -21,8 +21,9 @@ import gloLogo from "../../../public/assets/glo_logo.webp";
 import airtelLogo from "../../../public/assets/airtel_logo.png";
 import nineMobileLogo from "../../../public/assets/9mobile_logo.jpeg";
 import Image from "next/image";
-import { ProviderCard } from "../../giftcard/ProviderCard";
+
 import { AirtimeForm } from "./AirtimeForm";
+import { ProviderCard } from "../ProviderCard";
 
 type Props = { action: any };
 

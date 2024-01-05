@@ -41,29 +41,6 @@ const WidgetContainer: FC<Props> = ({ children }) => {
           justifyContent={"space-between"}
         >
           <Image alt="logo" style={{ width: "80px" }} src={logo} />
-          <HStack gap={"20px"}>
-            <Link href={"/giftcard/create"}>
-              <Text
-                color={"#fff"}
-                fontSize={"small"}
-                fontWeight={"500"}
-                _hover={{ textDecoration: "underline", fontWeight: "700" }}
-              >
-                GiftCard
-              </Text>
-            </Link>
-            <Link href={"/spend/"}>
-              {" "}
-              <Text
-                color={"#fff"}
-                fontSize={"small"}
-                fontWeight={"500"}
-                _hover={{ textDecoration: "underline", fontWeight: "700" }}
-              >
-                Spend
-              </Text>
-            </Link>
-          </HStack>
         </HStack>
       </HStack>
       <VStack py={"4px"} width={"full"} maxW={"500px"} marginX={"auto"}>
