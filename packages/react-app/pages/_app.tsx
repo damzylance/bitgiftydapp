@@ -18,9 +18,9 @@ const { chains, publicClient } = configureChains(
   [publicProvider()]
 );
 
-// const connectors = [new InjectedConnector({ chains })];
+const connectors = [new InjectedConnector({ chains })];
 
-const connectors = celoGroups({ chains, projectId });
+// const connectors = celoGroups({ chains, projectId });
 
 const appInfo = {
   appName: "Celo Composer",
@@ -36,9 +36,9 @@ function App({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains} appInfo={appInfo} coolMode={true}>
-          <Layout>
+          <WidgetContainer>
             <Component {...pageProps} />
-          </Layout>
+          </WidgetContainer>
         </RainbowKitProvider>
       </WagmiConfig>
     </ChakraProvider>
