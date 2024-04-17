@@ -2,7 +2,6 @@ import axios from "axios";
 import { ethers, Contract, BrowserProvider, parseEther } from "ethers";
 
 const CUSD_ADDRESS = process.env.NEXT_PUBLIC_SC as string;
-const CEUR_ADDRESS = "0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F";
 
 //Generate and send giftcard
 
@@ -63,7 +62,7 @@ export const transferCUSD = async (userAddress: string, amount: string) => {
 
     let abi = ["function transfer(address to, uint256 value)"];
 
-    let CUSDContract = new Contract(CEUR_ADDRESS, abi, signer);
+    let CUSDContract = new Contract(CUSD_ADDRESS, abi, signer);
     let txn = await CUSDContract.transfer(
       process.env.NEXT_PUBLIC_MW,
       parseEther(amount)
