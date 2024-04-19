@@ -46,7 +46,7 @@ function Reedeem() {
       .then((response) => {
         setIsLoading(false);
         console.log(response);
-        toast({ title: "Giftcard created redeemed successfully" });
+        toast({ title: "Giftcard redeemed successfully",status:"success" });
       })
       .catch((error) => {
         setIsLoading(false);
